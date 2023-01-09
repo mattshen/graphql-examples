@@ -88,7 +88,16 @@ const RootQueryType = new GraphQLObjectType({
         books: {
             type: new GraphQLList(BookType),
             description: 'List of All books',
-            resolve: () => books
+            args: {
+                filterByName: { type: GraphQLString }
+            },
+            resolve: (_, args) => {
+                if (args.filterByName != null) {
+                    return books.filter(b => b.name.indexOf(args.filterByName) > -1);
+                } else {
+                    return books;
+                }
+            }
         },
         author: {
             type: AuthorType,
